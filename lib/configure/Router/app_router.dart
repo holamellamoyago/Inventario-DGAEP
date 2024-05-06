@@ -1,9 +1,8 @@
-
-import 'package:firebase_web/presentation/screens/inventario/ordenadores/crear_ordenadores_screen.dart';
+import 'package:firebase_web/presentation/screens/inventario/articulo_screen.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/home_screen', 
+  initialLocation: '/articulo_screen', 
   routes: [
   GoRoute(
     path: '/login_screen',
@@ -11,7 +10,7 @@ final appRouter = GoRouter(
     builder: (context, state) => const DashBoardScreen(),
   ),
   GoRoute(
-    path: '/home_screen',
+    path: '/',
     name: HomeScreen.name,
     builder: (context, state) => const HomeScreen(),
   ),
@@ -44,5 +43,10 @@ final appRouter = GoRouter(
     path: '/creacion_ordenadores_screen',
     name: CreacionOrdenadores.name,
     builder: (context, state) => const CreacionOrdenadores(),
+  ),
+  GoRoute(
+    path: '/articulo_screen',
+    name: ArticuloScreen.name,
+    builder: (context, state) => const ArticuloScreen(),
   ),
 ]);

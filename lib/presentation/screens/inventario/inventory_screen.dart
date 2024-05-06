@@ -1,3 +1,4 @@
+import 'package:firebase_web/configure/preferences/prefs_inventario.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -112,9 +113,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<void> scannerQR() async {
+    var prefs = PreferenciasInventario();
     String barcodeScanRes;
     var status = await Permission.camera.request();
-    
+
     status.isDenied
         ? showSnackBar(context, 'Permiso denegado')
         : showSnackBar(context, 'Permiso concedido');
@@ -122,6 +124,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", 'Cancelar', true, ScanMode.QR);
+      prefs.ultimoEscaneo = barcodeScanRes;
     } catch (e) {
       showSnackBar(context, 'Ocurrio un mensaje en la lectura del código QR');
       barcodeScanRes = 'ff';
@@ -131,6 +134,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
     setState(() {
       text = barcodeScanRes;
     });
+
+    prefs.ultimoEscaneo = barcodeScanRes;
+
+    prefs.ultimoEscaneo != null
+        ? context.push('/articulo_screen')
+        : showSnackBar(context, 'Hubo un error');
   }
 }
 
