@@ -100,15 +100,16 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/creacion_ordenadores_screen'),
+        onPressed: () async {
+          context.push('/creacion_ordenadores_screen');
+        },
         child: const Icon(Icons.computer),
       ),
     );
   }
 
-  Future<void> scannerQR() async {
-    
+  // Future<void> scannerQR() async {
 
-    return;
-  }
+  //   return;
+  // }
 }

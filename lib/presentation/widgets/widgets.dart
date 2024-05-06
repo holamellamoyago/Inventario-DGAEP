@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +88,9 @@ class AppBarCustom extends StatelessWidget {
 
 void showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message), dismissDirection: DismissDirection.horizontal, duration: const Duration(seconds: 3),)
+    SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+    ),
   );
 }

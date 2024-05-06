@@ -8,6 +8,9 @@ export 'package:go_router/go_router.dart';
 export 'package:firebase_web/configure/Router/app_router.dart';
 export 'package:flutter_dotenv/flutter_dotenv.dart';
 
+export 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+export 'package:permission_handler/permission_handler.dart';
+
 
 
 // Providers

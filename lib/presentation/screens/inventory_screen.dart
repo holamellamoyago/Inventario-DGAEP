@@ -1,5 +1,4 @@
 import 'package:firebase_web/presentation/screens_widgets.dart';
-import 'package:firebase_web/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -11,6 +10,8 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  String text = 'No hay nada';
+
   @override
   Widget build(BuildContext context) {
     final subtitleStyleMedium = Theme.of(context).textTheme.bodyMedium;
@@ -32,9 +33,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     Icon(Icons.arrow_back),
                     Text(
                       'Inventario',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 20,)
+                    SizedBox(
+                      width: 20,
+                    )
                   ],
                 ),
               ),
@@ -84,37 +88,49 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 },
               ),
             ),
-            const _ButtonBar(),
+            Text(text),
+            Positioned(
+                child: Expanded(
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Positioned(
+                    bottom: 50,
+                    child: FloatingActionButton(
+                      onPressed: () => scannerQR(),
+                      child: const Icon(Icons.qr_code_2),
+                    ),
+                  ),
+                ],
+              ),
+            )),
           ],
         ),
       ),
     );
   }
-}
 
-class _ButtonBar extends StatelessWidget {
-  const _ButtonBar({
-    super.key,
-  });
+  Future<void> scannerQR() async {
+    String barcodeScanRes;
+    var status = await Permission.camera.request();
+    
+    status.isDenied
+        ? showSnackBar(context, 'Permiso denegado')
+        : showSnackBar(context, 'Permiso concedido');
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        child: Expanded(
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
-        children: [
-          Positioned(
-            bottom: 50,
-            child: FloatingActionButton(
-              onPressed: () {},
-              child: const Icon(Icons.qr_code_2),
-            ),
-          ),
-        ],
-      ),
-    ));
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", 'Cancelar', true, ScanMode.QR);
+    } catch (e) {
+      showSnackBar(context, 'Ocurrio un mensaje en la lectura del código QR');
+      barcodeScanRes = 'ff';
+      return;
+    }
+
+    setState(() {
+      text = barcodeScanRes;
+    });
   }
 }
 
@@ -140,19 +156,3 @@ class _Espaciador extends StatelessWidget {
     );
   }
 }
-
-
-
-
-// SizedBox(
-//           child: Positioned(
-//               child: Stack(
-//             alignment: Alignment.bottomCenter,
-//             clipBehavior: Clip.none,
-//             children: [
-//               Positioned(
-//                 bottom: 45,
-//                 child: FloatingActionButton(onPressed: (){}, child: Icon(Icons.qr_code),)
-//             )],
-//           )),
-//         ),
