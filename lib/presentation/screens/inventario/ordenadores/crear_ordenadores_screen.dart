@@ -43,38 +43,38 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
                       'Nombre de equipo',
                       style: titleStyleLarge,
                     ),
-                    PaddingCustom(
+                    const PaddingCustom(
                       height: 8,
                     ),
                     TextFieldcustom(
                         nombreEquipoLabel: nombreEquipoLabel,
                         nombreEquipoController: nombreEquipoController),
-                    SizedBox(
+                    const SizedBox(
                       height: 24,
                     ),
                     Text(
                       'Numero de serie',
                       style: titleStyleLarge,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     TextFieldcustom(
                         nombreEquipoLabel: numeroSerieLabel,
                         nombreEquipoController: numeroSerieController),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Text(
                       'Especificaciones del equipo',
                       style: titleStyleLarge,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     TextFieldcustom(
                         nombreEquipoLabel: especificacionesLabel,
                         nombreEquipoController: especificacionesController),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FilledButton(
-                            onPressed: uploadPC, child: Text('Añadir nuevo PC'))
+                            onPressed: uploadPC, child: const Text('Añadir nuevo PC'))
                       ],
                     )
                   ],
@@ -93,8 +93,6 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
     String especificaciones = especificacionesController.text;
     String id = randomAlphaNumeric(20);
 
-    print('LLego a la función');
-
     await FirebaseFirestore.instance
         .collection('dgaep')
         .doc('inventario')
@@ -110,9 +108,9 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
 }
 
 class PaddingCustom extends StatelessWidget {
-  double height;
-  double width;
-  PaddingCustom({
+  final double height;
+  final double width;
+  const PaddingCustom({
     super.key,
     this.height = 0,
     this.width = 0,
@@ -141,7 +139,7 @@ class TextFieldcustom extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-          border: OutlineInputBorder(), label: Text(nombreEquipoLabel)),
+          border: const OutlineInputBorder(), label: Text(nombreEquipoLabel)),
       controller: nombreEquipoController,
     );
   }

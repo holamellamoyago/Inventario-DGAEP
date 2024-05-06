@@ -1,4 +1,3 @@
-
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -49,8 +48,9 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
         child: Column(
           children: [
             AppBarCustom(
-                tituloAppBar: 'Listado dos ordenadores',
-                titleStyleLarge: titleStyleLarge,),
+              tituloAppBar: 'Listado dos ordenadores',
+              titleStyleLarge: titleStyleLarge,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -105,6 +105,10 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
       ),
     );
   }
+
+  Future<void> scannerQR() async {
+    
+
+    return;
+  }
 }
-
-

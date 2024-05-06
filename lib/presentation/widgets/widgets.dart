@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -56,9 +58,8 @@ class CardContainer extends StatelessWidget {
   }
 }
 
-
 class AppBarCustom extends StatelessWidget {
-   const AppBarCustom({
+  const AppBarCustom({
     super.key,
     required this.tituloAppBar,
     required this.titleStyleLarge,
@@ -84,4 +85,10 @@ class AppBarCustom extends StatelessWidget {
       ],
     );
   }
+}
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message), dismissDirection: DismissDirection.horizontal, duration: const Duration(seconds: 3),)
+  );
 }
