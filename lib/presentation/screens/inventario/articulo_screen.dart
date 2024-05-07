@@ -152,7 +152,9 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                           }).toList(),
                         ),
                       ),
-                      const SizedBox(width: 40,),
+                      const SizedBox(
+                        width: 40,
+                      ),
                       Expanded(
                         child: DropdownButton<String>(
                           value: opcionSeleccionadaRAM,
@@ -183,9 +185,15 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                     ],
                   )
                 : const SizedBox(),
-                const PaddingCustom(height: 10,),
+            const PaddingCustom(
+              height: 10,
+            ),
             OutlinedButton(
-                onPressed: crearNuevoArticulo, child: const Text('Enviar ao inventario')),
+                onPressed: () {
+                  crearNuevoArticulo();
+                  context.go('/');
+                },
+                child: const Text('Enviar ao inventario')),
           ],
         ),
       ),
@@ -206,7 +214,8 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         .set({
       'Serial_number': prefs.ultimoEscaneo,
       'Periferico': opcionSeleccionadaPerifericos,
-      'Dono': persona
+      'Dono': persona,
+      'Disponible': true
     });
   }
 
