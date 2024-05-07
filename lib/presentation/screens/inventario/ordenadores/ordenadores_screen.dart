@@ -15,23 +15,6 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
   Query? ordenadoresDisponibles;
   int contadorOrdenadoresDisponibles = 0;
 
-  getOrdenadoresDisponibles() async {
-    var numero = await FirebaseFirestore.instance
-        .collection('dgaep')
-        .doc('inventario')
-        .collection("ordenadores")
-        .where('Disponible', isEqualTo: true)
-        .get();
-    setState(() {
-      contadorOrdenadoresDisponibles = numero.size;
-    });
-  }
-
-  getOnTheLoad() async {
-    ordenadoresStream = await DataBaseMethods().getOrdenadoresDetails();
-    setState(() {});
-  }
-
   @override
   void initState() {
     getOnTheLoad();
@@ -42,6 +25,7 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    String opcionSeleccionadaPerifericos = 'a';
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
       body: SafeArea(
@@ -86,8 +70,8 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                           DocumentSnapshot ordenadoresSnapshot =
                               snapshot.data.docs[index];
                           return ListTile(
-                            title: Text(ordenadoresSnapshot['nombre_equipo']),
-                            subtitle: Text(ordenadoresSnapshot['numero_serie']),
+                            title: Text(ordenadoresSnapshot['Serial_number']),
+                            subtitle: Text(ordenadoresSnapshot['Periferico']),
                           );
                         },
                       ))
@@ -95,7 +79,7 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                         children: [CircularProgressIndicator()],
                       );
               },
-            )
+            ),
           ],
         ),
       ),
@@ -108,8 +92,19 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
     );
   }
 
-  // Future<void> scannerQR() async {
+  getOnTheLoad() async {
+    ordenadoresStream = await DataBaseMethods().getOrdenadoresDetails();
+    setState(() {});
+  }
 
-  //   return;
-  // }
+  getOrdenadoresDisponibles() async {
+    var numero = await FirebaseFirestore.instance
+        .collection('dgaep')
+        .doc('inventario')
+        .collection("Ordenadores")
+        .where('Disponible', isEqualTo: true)
+        .get();
+    contadorOrdenadoresDisponibles = numero.size;
+    setState(() {});
+  }
 }
