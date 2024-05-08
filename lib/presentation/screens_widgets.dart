@@ -5,6 +5,7 @@
 
 
 
+
 export 'package:go_router/go_router.dart';
 export 'package:firebase_web/configure/Router/app_router.dart';
 export 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -34,6 +35,7 @@ export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_web/configure/firestore/firestore.dart';
+export 'package:firebase_storage/firebase_storage.dart';
 
 
 

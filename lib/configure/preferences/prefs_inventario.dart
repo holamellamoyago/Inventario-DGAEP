@@ -14,5 +14,12 @@ class PreferenciasInventario {
   set ultimoEscaneo(String value) {
     prefs.setString('ultimoEscaneo', value);
   }
+
+  String get ultimoPerifericoSeleccionado {
+    return prefs.getString('ultimoPerifericoSeleccionado') ?? '';
+  }
+
+  set ultimoPerifericoSeleccionado(String value) {
+    prefs.setString('ultimoPerifericoSeleccionado', value);
+  }
 }
-  

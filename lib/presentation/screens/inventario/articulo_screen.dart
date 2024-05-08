@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:firebase_web/configure/Storage/image_picker.dart';
+import 'package:firebase_web/configure/Storage/storage.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -124,6 +128,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
             // This is called when the user selects an item.
             setState(() {
               opcionSeleccionadaPerifericos = value!;
+              prefs.ultimoPerifericoSeleccionado = value;
             });
             showSnackBar(context, opcionSeleccionadaPerifericos);
           },
@@ -255,7 +260,21 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                 children: [
                   Text('Upload your image'),
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.camera_alt_outlined))
+                      onPressed: () async {
+                        final image = await getImage();
+                        if (image == null) {
+                          return;
+                        } else {
+                          final imageUploaded = File(image.path);
+                          final uploaded = await uploadImageProfile(
+                              imageUploaded, prefs.ultimoEscaneo);
+                          uploaded
+                              ? showSnackBar(
+                                  context, 'Imagen subida correctamente')
+                              : showSnackBar(context, 'Imagen erronea');
+                        }
+                      },
+                      icon: Icon(Icons.camera_alt_outlined))
                 ],
               ),
             ),
@@ -295,7 +314,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
           .doc('inventario')
           .collection(opcionSeleccionadaPerifericos)
           .doc(prefs.ultimoEscaneo)
-          .set({
+          .update({
         'Serial_number': prefs.ultimoEscaneo,
         'Periferico': opcionSeleccionadaPerifericos,
         'Dono': persona,
