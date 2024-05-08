@@ -1,6 +1,5 @@
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ArticuloScreen extends StatefulWidget {
   static const name = '/articulo_screen';
@@ -13,6 +12,7 @@ class ArticuloScreen extends StatefulWidget {
 List<String> perifericos = <String>[
   'Seleccione tipo de periferico',
   'Ordenador',
+  'Portatil',
   'Monitores',
   'Ratones',
   'Hub Dell'
@@ -74,128 +74,193 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
             const PaddingCustom(
               height: 10,
             ),
-            TextField(
-              controller: personaController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  label: Text('¿ Para que persoa vai?')),
-            ),
+            textFieldNombrePersona(context),
             const PaddingCustom(
               height: 20,
             ),
-            TextField(
-              controller: serialNumberController,
-              readOnly: false,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: scannerQR,
-                  icon: const Icon(Icons.camera_alt_outlined),
-                ),
-                label: Text(prefs.ultimoEscaneo),
-              ),
+            textFieldSerialNumber(context, serialNumberController),
+            const PaddingCustom(
+              height: 10,
+            ),
+            dropDownMenuOrdenadores(context),
+            const PaddingCustom(
+              height: 10,
             ),
             const PaddingCustom(
               height: 10,
             ),
-            DropdownButton<String>(
-              value: opcionSeleccionadaPerifericos,
-              isExpanded: true,
-              icon: const Icon(Icons.arrow_downward),
-              // elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String? value) {
-                // This is called when the user selects an item.
-                setState(() {
-                  opcionSeleccionadaPerifericos = value!;
-                });
-                showSnackBar(context, opcionSeleccionadaPerifericos);
-              },
-              items: perifericos.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            opcionSeleccionadaPerifericos == 'Ordenador'
-                ? Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButton<String>(
-                          value: opcionSeleccionadaProcesador,
-                          isExpanded: true,
-                          icon: const Icon(Icons.arrow_downward),
-                          // elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? value) {
-                            // This is called when the user selects an item.
-                            setState(() {
-                              opcionSeleccionadaProcesador = value!;
-                            });
-                            showSnackBar(context, opcionSeleccionadaProcesador);
-                          },
-                          items: ordenadoresProcesador
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 40,
-                      ),
-                      Expanded(
-                        child: DropdownButton<String>(
-                          value: opcionSeleccionadaRAM,
-                          isExpanded: true,
-                          icon: const Icon(Icons.arrow_downward),
-                          // elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? value) {
-                            // This is called when the user selects an item.
-                            setState(() {
-                              opcionSeleccionadaRAM = value!;
-                            });
-                            showSnackBar(context, opcionSeleccionadaRAM);
-                          },
-                          items: ordenadoresRAM
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox(),
-            const PaddingCustom(
-              height: 10,
-            ),
+            containerImagen(context),
             OutlinedButton(
                 onPressed: () {
                   crearNuevoArticulo();
                   context.go('/');
                 },
                 child: const Text('Enviar ao inventario')),
+            OutlinedButton(
+                onPressed: () {
+                  showSnackBar(context, serialNumberController.text);
+                },
+                child: Text('Mostrar el p'))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget dropDownMenuOrdenadores(BuildContext context) {
+    return Column(
+      children: [
+        DropdownButton<String>(
+          value: opcionSeleccionadaPerifericos,
+          isExpanded: true,
+          icon: const Icon(Icons.arrow_downward),
+          // elevation: 16,
+          style: const TextStyle(color: Colors.deepPurple),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
+          ),
+          onChanged: (String? value) {
+            // This is called when the user selects an item.
+            setState(() {
+              opcionSeleccionadaPerifericos = value!;
+            });
+            showSnackBar(context, opcionSeleccionadaPerifericos);
+          },
+          items: perifericos.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+        opcionSeleccionadaPerifericos == 'Ordenador' ||
+                opcionSeleccionadaPerifericos == 'Portatil'
+            ? Row(
+                children: [
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: opcionSeleccionadaProcesador,
+                      isExpanded: true,
+                      icon: const Icon(Icons.arrow_downward),
+                      // elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (String? value) {
+                        // This is called when the user selects an item.
+                        setState(() {
+                          opcionSeleccionadaProcesador = value!;
+                        });
+                        showSnackBar(context, opcionSeleccionadaProcesador);
+                      },
+                      items: ordenadoresProcesador
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: opcionSeleccionadaRAM,
+                      isExpanded: true,
+                      icon: const Icon(Icons.arrow_downward),
+                      // elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (String? value) {
+                        // This is called when the user selects an item.
+                        setState(() {
+                          opcionSeleccionadaRAM = value!;
+                        });
+                        showSnackBar(context, opcionSeleccionadaRAM);
+                      },
+                      items: ordenadoresRAM
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox(),
+      ],
+    );
+  }
+
+  Widget textFieldSerialNumber(BuildContext context, serialNumberController) {
+    return TextField(
+      controller: serialNumberController,
+      readOnly: false,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          onPressed: scannerQR, //scannerQr,
+          icon: const Icon(Icons.qr_code_2_sharp),
+        ),
+        label: const Text('Serial number'),
+      ),
+    );
+  }
+
+  Widget textFieldNombrePersona(BuildContext context) {
+    return TextField(
+      controller: personaController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(), label: Text('¿ Para que persoa vai?')),
+    );
+  }
+
+  Widget containerImagen(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+          border: Border.all(), borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                ImageNetwork(
+                    image:
+                        'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png',
+                    height: 200,
+                    width: 200),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.blue[100],
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Upload your image'),
+                  IconButton(
+                      onPressed: () {}, icon: Icon(Icons.camera_alt_outlined))
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -205,18 +270,38 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
 
     final persona =
         personaController.text.isEmpty ? 'Nadie' : personaController.text;
+    final periferico = opcionSeleccionadaPerifericos;
+    final procesador = opcionSeleccionadaProcesador;
+    final ram = opcionSeleccionadaRAM;
 
-    await db
-        .collection('dgaep')
-        .doc('inventario')
-        .collection(opcionSeleccionadaPerifericos)
-        .doc(prefs.ultimoEscaneo)
-        .set({
-      'Serial_number': prefs.ultimoEscaneo,
-      'Periferico': opcionSeleccionadaPerifericos,
-      'Dono': persona,
-      'Disponible': true
-    });
+    if (opcionSeleccionadaPerifericos == 'Ordenador' ||
+        opcionSeleccionadaPerifericos == 'Portatil') {
+      await db
+          .collection('dgaep')
+          .doc('inventario')
+          .collection(periferico)
+          .doc(prefs.ultimoEscaneo)
+          .set({
+        'Serial_number': prefs.ultimoEscaneo,
+        'Periferico': opcionSeleccionadaPerifericos,
+        'Dono': persona,
+        'Disponible': false,
+        'Procesador': procesador,
+        'Memoria_RAM': ram
+      });
+    } else {
+      await db
+          .collection('dgaep')
+          .doc('inventario')
+          .collection(opcionSeleccionadaPerifericos)
+          .doc(prefs.ultimoEscaneo)
+          .set({
+        'Serial_number': prefs.ultimoEscaneo,
+        'Periferico': opcionSeleccionadaPerifericos,
+        'Dono': persona,
+        'Disponible': true
+      });
+    }
   }
 
   Future<void> scannerQR() async {
