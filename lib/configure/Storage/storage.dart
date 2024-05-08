@@ -21,15 +21,9 @@ Future<bool> uploadImageProfile(File image, String path) async {
     print(e);
   }
 
-  var image_url = await ref.getDownloadURL();
+  // var image_url = await ref.getDownloadURL();
 
-  prefs.
+  prefs.ultimaFotoSacada = await  ref.getDownloadURL();
 
-  await firestore
-      .collection('dgaep')
-      .doc('inventario')
-      .collection(prefs.ultimoPerifericoSeleccionado)
-      .doc(prefs.ultimoEscaneo)
-      .update({'image_url': image_url});
   return value;
 }

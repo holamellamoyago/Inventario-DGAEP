@@ -22,4 +22,11 @@ class PreferenciasInventario {
   set ultimoPerifericoSeleccionado(String value) {
     prefs.setString('ultimoPerifericoSeleccionado', value);
   }
+  String get ultimaFotoSacada {
+    return prefs.getString('ultimaFotoSacada') ?? 'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
+  }
+
+  set ultimaFotoSacada(String value) {
+    prefs.setString('ultimaFotoSacada', value);
+  }
 }
