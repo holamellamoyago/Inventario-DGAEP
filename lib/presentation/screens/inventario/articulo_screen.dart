@@ -54,6 +54,12 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   TextEditingController personaController = TextEditingController();
 
   @override
+  void initState() {
+    // crearNuevoArticulo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
@@ -95,16 +101,24 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
             ),
             containerImagen(context),
             OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
                   crearNuevoArticulo();
                   context.go('/');
                 },
                 child: const Text('Enviar ao inventario')),
             OutlinedButton(
                 onPressed: () {
-                  showSnackBar(context, serialNumberController.text);
+                  showSnackBar(context, prefs.ultimaFotoSacada);
+                  prefs.ultimaFotoSacada =
+                      'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
                 },
-                child: Text('Mostrar el p'))
+                child: const Text('Mostrar el p')),
+            OutlinedButton(
+                onPressed: () async {
+                  getImageRef();
+                  showSnackBar(context, prefs.ultimaFotoSacada);
+                },
+                child: const Text('Mostrar ref')),
           ],
         ),
       ),
@@ -230,60 +244,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
     );
   }
 
-  Widget containerImagen(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-          border: Border.all(), borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                ImageNetwork(
-                    image:
-                        'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png',
-                    height: 200,
-                    width: 200),
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Upload your image'),
-                  IconButton(
-                      onPressed: () async {
-                        final image = await getImage();
-                        if (image == null) {
-                          return;
-                        } else {
-                          final imageUploaded = File(image.path);
-                          final uploaded = await uploadImageProfile(
-                              imageUploaded, prefs.ultimoEscaneo);
-                          uploaded
-                              ? showSnackBar(
-                                  context, 'Imagen subida correctamente')
-                              : showSnackBar(context, 'Imagen erronea');
-                        }
-                      },
-                      icon: Icon(Icons.camera_alt_outlined))
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   void crearNuevoArticulo() async {
     final db = FirebaseFirestore.instance;
 
@@ -292,6 +252,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
     final periferico = opcionSeleccionadaPerifericos;
     final procesador = opcionSeleccionadaProcesador;
     final ram = opcionSeleccionadaRAM;
+    final image = prefs.ultimaFotoSacada;
 
     if (opcionSeleccionadaPerifericos == 'Ordenador' ||
         opcionSeleccionadaPerifericos == 'Portatil') {
@@ -306,20 +267,56 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         'Dono': persona,
         'Disponible': false,
         'Procesador': procesador,
-        'Memoria_RAM': ram
+        'Memoria_RAM': ram,
+        'image_url': image
       });
+      prefs.ultimaFotoSacada =
+          'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
     } else {
       await db
           .collection('dgaep')
           .doc('inventario')
           .collection(opcionSeleccionadaPerifericos)
           .doc(prefs.ultimoEscaneo)
-          .update({
+          .set({
         'Serial_number': prefs.ultimoEscaneo,
         'Periferico': opcionSeleccionadaPerifericos,
         'Dono': persona,
-        'Disponible': true
+        'Disponible': true,
+        'image_url': image
       });
+      prefs.ultimaFotoSacada =
+          'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
+    }
+  }
+
+  Future<void> getImageRef() async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final PreferenciasInventario prefs = PreferenciasInventario();
+    final image = await getImage();
+
+    if (image == null) {
+      return;
+    } else {
+      final imageUploaded = File(image.path);
+      final uploaded =
+          await uploadImageProfile(imageUploaded, prefs.ultimoEscaneo);
+      if (uploaded) {
+        showSnackBar(context, 'Imagen subida');
+      } else {
+        showSnackBar(context, 'Error imagen');
+      }
+
+
+      final Reference ref = storage
+          .ref()
+          .child('dgaep')
+          .child('inventario')
+          .child(prefs.ultimoEscaneo);
+
+      prefs.ultimaFotoSacada = await ref.getDownloadURL();
+
+      showSnackBar(context, 'Funcion lograda');
     }
   }
 
@@ -352,4 +349,53 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         ? context.push('/articulo_screen')
         : showSnackBar(context, 'Hubo un error');
   }
+
+  Widget containerImagen(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+          border: Border.all(), borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                ImageNetwork(
+                    image: prefs.ultimaFotoSacada, height: 200, width: 300)
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.blue[100],
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Upload your image'),
+                  IconButton(
+                      onPressed: () async {
+                        await getImageRef();
+                        pasarScreen();
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined))
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void pasarScreen() async {
+    showSnackBar(context, 'Snackbar antes de moverse');
+    context.push('/articulo_screen');
+  }
 }
+
+
+// Tengo que hacer que con el boton de abajo limpiar las prefs y así comprobar de verdad quien es el prf.

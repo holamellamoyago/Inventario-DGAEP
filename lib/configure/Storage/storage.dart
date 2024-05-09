@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_web/presentation/screens_widgets.dart';
+import 'package:flutter/material.dart';
 
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -23,7 +24,11 @@ Future<bool> uploadImageProfile(File image, String path) async {
 
   // var image_url = await ref.getDownloadURL();
 
+
+  
   prefs.ultimaFotoSacada = await  ref.getDownloadURL();
+
+  
 
   return value;
 }
