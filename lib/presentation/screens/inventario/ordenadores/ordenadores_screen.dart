@@ -10,6 +10,7 @@ class OrdenadoresScreen extends StatefulWidget {
 }
 
 class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
+  var prefs = PreferenciasInventario();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Stream? ordenadoresStream;
   Stream? ordenadoresDisponiblesStream;
@@ -27,7 +28,10 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
     var size = MediaQuery.of(context).size;
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
-      appBar: AppBar(title: const Text('Listado de ordenadores'), centerTitle: true,),
+      appBar: AppBar(
+        title: const Text('Listado de ordenadores'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -36,7 +40,7 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
               builder: (context, snapshot) {
                 return snapshot.hasData
                     ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CardContainer(
                             size: size,
@@ -74,11 +78,17 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                         itemBuilder: (context, index) {
                           DocumentSnapshot ordenadoresSnapshot =
                               snapshot.data.docs[index];
+                          String title = ordenadoresSnapshot['Serial_number'];
+                          String subtitle = ordenadoresSnapshot['Periferico'];
                           return ListTile(
-                            title: Text(ordenadoresSnapshot['Serial_number']),
-                            subtitle: Text(ordenadoresSnapshot['Periferico']),
+                            title: Text(title),
+                            subtitle: Text(subtitle),
                             trailing: const Icon(Icons.arrow_right_outlined),
-                            onTap: () => context.push('/detallesOrdenador_screen'),
+                            onTap: () async {
+                              prefs.ultimoEscaneo = title;
+
+                              context.push('/detallesOrdenador_screen');
+                            },
                           );
                         },
                       ))
@@ -104,5 +114,4 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
 
     setState(() {});
   }
-
 }
