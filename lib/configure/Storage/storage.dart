@@ -7,7 +7,7 @@ final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final PreferenciasInventario prefs = PreferenciasInventario();
 
-bool value = false;
+bool valueUploadImageProfile = false;
 Future<bool> uploadImageProfile(File image, String path) async {
   final Reference ref = storage
       .ref()
@@ -17,7 +17,7 @@ Future<bool> uploadImageProfile(File image, String path) async {
 
   try {
     await ref.putFile(image);
-    value = true;
+    valueUploadImageProfile = true;
   } on FirebaseException catch (e) {
     print(e);
   }
@@ -30,5 +30,5 @@ Future<bool> uploadImageProfile(File image, String path) async {
 
   
 
-  return value;
+  return valueUploadImageProfile;
 }

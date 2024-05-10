@@ -16,7 +16,7 @@ class PreferenciasInventario {
   }
 
   String get ultimoPerifericoSeleccionado {
-    return prefs.getString('ultimoPerifericoSeleccionado') ?? '';
+    return prefs.getString('ultimoPerifericoSeleccionado') ?? 'Seleccione un periferico';
   }
 
   set ultimoPerifericoSeleccionado(String value) {
