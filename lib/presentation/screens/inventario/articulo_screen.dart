@@ -92,16 +92,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
               height: 10,
             ),
             dropDownMenuOrdenadores(context),
-            DropdownMenu(
-              label: const Text('Selecciona el tipo de periferico:'),
-              dropdownMenuEntries:
-                  perifericos.map<DropdownMenuEntry<String>>((String value) {
-                return DropdownMenuEntry(
-                  value: value,
-                  label: value,
-                );
-              }).toList(),
-            ),
             const PaddingCustom(
               height: 10,
             ),
@@ -135,36 +125,58 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   }
 
   Widget dropDownMenuOrdenadores(BuildContext context) {
+    TextEditingController perifericoController = TextEditingController();
+    bool perifericoSeleccionado = false;
+    String label = '¿Que periferico é?';
+
     return Column(
       children: [
-        DropdownButton<String>(
-          value: opcionSeleccionadaPerifericos,
+        // DropdownButton<String>(
+        //   value: opcionSeleccionadaPerifericos,
 
-          isExpanded: true,
-          icon: const Icon(Icons.arrow_downward),
-          // elevation: 16,
-          style: const TextStyle(color: Colors.deepPurple),
-          underline: Container(
-            height: 2,
-            color: Colors.deepPurpleAccent,
-          ),
-          onChanged: (String? value) {
-            // This is called when the user selects an item.
-            setState(() {
-              opcionSeleccionadaPerifericos = value!;
-              prefs.ultimoPerifericoSeleccionado = value;
-            });
-            showSnackBar(context, opcionSeleccionadaPerifericos);
-          },
-          items: perifericos.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
+        //   isExpanded: true,
+        //   icon: const Icon(Icons.arrow_downward),
+        //   // elevation: 16,
+        //   style: const TextStyle(color: Colors.deepPurple),
+        //   underline: Container(
+        //     height: 2,
+        //     color: Colors.deepPurpleAccent,
+        //   ),
+        //   onChanged: (String? value) {
+        //     // This is called when the user selects an item.
+        //     setState(() {
+        //       opcionSeleccionadaPerifericos = value!;
+        //       prefs.ultimoPerifericoSeleccionado = value;
+        //     });
+        //     showSnackBar(context, opcionSeleccionadaPerifericos);
+        //   },
+        //   items: perifericos.map<DropdownMenuItem<String>>((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        // ),
+        DropdownMenu(
+          controller: perifericoController,
+          // expandedInsets: EdgeInsets.zero,
+          label: Text(label),
+          dropdownMenuEntries:
+              perifericos.map<DropdownMenuEntry<String>>((String value) {
+            return DropdownMenuEntry(
               value: value,
-              child: Text(value),
+              label: value,
             );
           }).toList(),
+          onSelected: (value) async {
+            prefs.ultimoPerifericoSeleccionado = value.toString();
+            label = prefs.ultimoPerifericoSeleccionado;
+            showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
+            context.push('/articulo_screen');
+          },
         ),
-        opcionSeleccionadaPerifericos == 'Ordenador' ||
-                opcionSeleccionadaPerifericos == 'Portatil'
+
+        prefs.ultimoPerifericoSeleccionado == 'Ordenador'
             ? Row(
                 children: [
                   Expanded(

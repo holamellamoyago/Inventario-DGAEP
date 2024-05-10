@@ -29,4 +29,11 @@ class PreferenciasInventario {
   set ultimaFotoSacada(String value) {
     prefs.setString('ultimaFotoSacada', value);
   }
+  String get prueba {
+    return prefs.getString('prueba') ?? 'a';
+  }
+
+  set prueba(String value) {
+    prefs.setString('prueba', value);
+  }
 }
