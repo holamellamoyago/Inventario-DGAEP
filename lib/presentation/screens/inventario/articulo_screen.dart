@@ -60,6 +60,8 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController perifericoController = TextEditingController();
+
     var size = MediaQuery.of(context).size;
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
     TextEditingController serialNumberController =
@@ -91,7 +93,97 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
             const PaddingCustom(
               height: 10,
             ),
-            dropDownMenuOrdenadores(context),
+            // dropDownMenuOrdenadores(context),
+            DropdownMenu(
+              controller: perifericoController,
+              // expandedInsets: EdgeInsets.zero,
+              label: Text(prefs.ultimoPerifericoSeleccionado),
+              dropdownMenuEntries:
+                  perifericos.map<DropdownMenuEntry<String>>((String value2) {
+                return DropdownMenuEntry(
+                  value: value2,
+                  label: value2,
+                );
+              }).toList(),
+              onSelected: (value2) async {
+                setState(() {
+                  perifericoController.text = value2!;
+                  prefs.ultimoPerifericoSeleccionado = value2;
+                  showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
+                });
+              },
+              //     // This is called when the user selects an item.
+              //     setState(() {
+              //       opcionSeleccionadaPerifericos = value!;
+              //       prefs.ultimoPerifericoSeleccionado = value;
+              //     });
+              //     showSnackBar(context, opcionSeleccionadaPerifericos);
+              //   },
+            ),
+
+            prefs.ultimoPerifericoSeleccionado == 'Ordenador'
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButton<String>(
+                          value: opcionSeleccionadaProcesador,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_downward),
+                          // elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? value) {
+                            // This is called when the user selects an item.
+                            setState(() {
+                              opcionSeleccionadaProcesador = value!;
+                            });
+                            showSnackBar(context, opcionSeleccionadaProcesador);
+                          },
+                          items: ordenadoresProcesador
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        child: DropdownButton<String>(
+                          value: opcionSeleccionadaRAM,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_downward),
+                          // elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? value) {
+                            // This is called when the user selects an item.
+                            setState(() {
+                              opcionSeleccionadaRAM = value!;
+                            });
+                            showSnackBar(context, opcionSeleccionadaRAM);
+                          },
+                          items: ordenadoresRAM
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
             const PaddingCustom(
               height: 10,
             ),
@@ -114,20 +206,22 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                 child: const Text('Mostrar el p')),
             OutlinedButton(
                 onPressed: () async {
-                  getImageRef();
-                  showSnackBar(context, prefs.ultimaFotoSacada);
+                  prefs.ultimoPerifericoSeleccionado = 'Hub';
+                  showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
                 },
-                child: const Text('Mostrar ref')),
+                child: const Text('Reiniciar a portatil')),
           ],
         ),
       ),
     );
   }
 
+  // void mostrarCaracteristicas(value2){
+  //   value2
+  // }
+
   Widget dropDownMenuOrdenadores(BuildContext context) {
-    TextEditingController perifericoController = TextEditingController();
     bool perifericoSeleccionado = false;
-    String label = '¿Que periferico é?';
 
     return Column(
       children: [
@@ -157,88 +251,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         //     );
         //   }).toList(),
         // ),
-        DropdownMenu(
-          controller: perifericoController,
-          // expandedInsets: EdgeInsets.zero,
-          label: Text(label),
-          dropdownMenuEntries:
-              perifericos.map<DropdownMenuEntry<String>>((String value) {
-            return DropdownMenuEntry(
-              value: value,
-              label: value,
-            );
-          }).toList(),
-          onSelected: (value) async {
-            prefs.ultimoPerifericoSeleccionado = value.toString();
-            label = prefs.ultimoPerifericoSeleccionado;
-            showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
-            context.push('/articulo_screen');
-          },
-        ),
-
-        prefs.ultimoPerifericoSeleccionado == 'Ordenador'
-            ? Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton<String>(
-                      value: opcionSeleccionadaProcesador,
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_downward),
-                      // elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          opcionSeleccionadaProcesador = value!;
-                        });
-                        showSnackBar(context, opcionSeleccionadaProcesador);
-                      },
-                      items: ordenadoresProcesador
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  Expanded(
-                    child: DropdownButton<String>(
-                      value: opcionSeleccionadaRAM,
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_downward),
-                      // elevation: 16,
-                      style: const TextStyle(color: Colors.deepPurple),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          opcionSeleccionadaRAM = value!;
-                        });
-                        showSnackBar(context, opcionSeleccionadaRAM);
-                      },
-                      items: ordenadoresRAM
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox(),
       ],
     );
   }
