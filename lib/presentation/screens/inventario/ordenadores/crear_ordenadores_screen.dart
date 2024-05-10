@@ -47,8 +47,8 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
                       height: 8,
                     ),
                     TextFieldcustom(
-                        nombreEquipoLabel: nombreEquipoLabel,
-                        nombreEquipoController: nombreEquipoController),
+                        texto: nombreEquipoLabel,
+                        controller: nombreEquipoController),
                     const SizedBox(
                       height: 24,
                     ),
@@ -58,8 +58,8 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
                     ),
                     const SizedBox(height: 8),
                     TextFieldcustom(
-                        nombreEquipoLabel: numeroSerieLabel,
-                        nombreEquipoController: numeroSerieController),
+                        texto: numeroSerieLabel,
+                        controller: numeroSerieController),
                     const SizedBox(height: 24),
                     Text(
                       'Especificaciones del equipo',
@@ -67,8 +67,8 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
                     ),
                     const SizedBox(height: 8),
                     TextFieldcustom(
-                        nombreEquipoLabel: especificacionesLabel,
-                        nombreEquipoController: especificacionesController),
+                        texto: especificacionesLabel,
+                        controller: especificacionesController),
                     const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -107,40 +107,4 @@ class _CreacionOrdenadoresState extends State<CreacionOrdenadores> {
   }
 }
 
-class PaddingCustom extends StatelessWidget {
-  final double height;
-  final double width;
-  const PaddingCustom({
-    super.key,
-    this.height = 0,
-    this.width = 0,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-    );
-  }
-}
-
-class TextFieldcustom extends StatelessWidget {
-  const TextFieldcustom({
-    super.key,
-    required this.nombreEquipoLabel,
-    required this.nombreEquipoController,
-  });
-
-  final String nombreEquipoLabel;
-  final TextEditingController nombreEquipoController;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-          border: const OutlineInputBorder(), label: Text(nombreEquipoLabel)),
-      controller: nombreEquipoController,
-    );
-  }
-}

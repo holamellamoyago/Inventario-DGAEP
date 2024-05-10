@@ -86,7 +86,7 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                             trailing: const Icon(Icons.arrow_right_outlined),
                             onTap: () async {
                               prefs.ultimoEscaneo = title;
-
+                              prefs.ultimoPerifericoSeleccionado = subtitle;
                               context.push('/detallesOrdenador_screen');
                             },
                           );

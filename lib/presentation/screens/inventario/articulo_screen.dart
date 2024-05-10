@@ -14,7 +14,6 @@ class ArticuloScreen extends StatefulWidget {
 }
 
 List<String> perifericos = <String>[
-  'Seleccione tipo de periferico',
   'Ordenador',
   'Portatil',
   'Monitores',
@@ -93,6 +92,16 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
               height: 10,
             ),
             dropDownMenuOrdenadores(context),
+            DropdownMenu(
+              label: const Text('Selecciona el tipo de periferico:'),
+              dropdownMenuEntries:
+                  perifericos.map<DropdownMenuEntry<String>>((String value) {
+                return DropdownMenuEntry(
+                  value: value,
+                  label: value,
+                );
+              }).toList(),
+            ),
             const PaddingCustom(
               height: 10,
             ),
@@ -130,6 +139,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
       children: [
         DropdownButton<String>(
           value: opcionSeleccionadaPerifericos,
+
           isExpanded: true,
           icon: const Icon(Icons.arrow_downward),
           // elevation: 16,
@@ -306,7 +316,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
       } else {
         showSnackBar(context, 'Error imagen');
       }
-
 
       final Reference ref = storage
           .ref()

@@ -94,3 +94,42 @@ void showSnackBar(BuildContext context, String message) {
     ),
   );
 }
+
+
+class PaddingCustom extends StatelessWidget {
+  final double height;
+  final double width;
+  const PaddingCustom({
+    super.key,
+    this.height = 0,
+    this.width = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      width: width,
+    );
+  }
+}
+
+class TextFieldcustom extends StatelessWidget {
+  const TextFieldcustom({
+    super.key,
+    required this.texto,
+    required this.controller,
+  });
+
+  final String texto;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+          border: const OutlineInputBorder(), label: Text(texto)),
+      controller: controller,
+    );
+  }
+}
