@@ -12,52 +12,57 @@ class OrdenadoresScreen extends StatefulWidget {
 class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Stream? ordenadoresStream;
+  Stream? ordenadoresDisponiblesStream;
   Query? ordenadoresDisponibles;
   int contadorOrdenadoresDisponibles = 0;
 
   @override
   void initState() {
     getOnTheLoad();
-    getOrdenadoresDisponibles();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    String opcionSeleccionadaPerifericos = 'a';
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
+      appBar: AppBar(title: const Text('Listado de ordenadores'), centerTitle: true,),
       body: SafeArea(
         child: Column(
           children: [
-            AppBarCustom(
-              tituloAppBar: 'Listado dos ordenadores',
-              titleStyleLarge: titleStyleLarge,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StreamBuilder(
-                  stream: ordenadoresStream,
-                  builder: (context, snapshot) {
-                    return snapshot.hasData
-                        ? CardContainer(
+            StreamBuilder(
+              stream: ordenadoresStream,
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CardContainer(
                             size: size,
                             string:
                                 'Total \nde \nordenadores:\n ${snapshot.data.docs.length}',
-                          )
-                        : const CircularProgressIndicator();
-                  },
-                ),
-                contadorOrdenadoresDisponibles >= 1
-                    ? CardContainer(
-                        size: size,
-                        string:
-                            'Ordenadores disponibles:\n ${contadorOrdenadoresDisponibles.toString()}',
+                          ),
+                          contadorOrdenadoresDisponibles >= 0
+                              ? FutureBuilder(
+                                  future: FirebaseFirestore.instance
+                                      .collection('dgaep')
+                                      .doc('inventario')
+                                      .collection("Ordenador")
+                                      .where('Disponible', isEqualTo: true)
+                                      .get(),
+                                  builder: (context, snapshot) {
+                                    return CardContainer(
+                                        size: size,
+                                        string:
+                                            'Ordenadores \n disponibles:\n ${snapshot.data!.docs.length}');
+                                  },
+                                )
+                              : const CircularProgressIndicator(),
+                        ],
                       )
-                    : const CircularProgressIndicator(),
-              ],
+                    : const CircularProgressIndicator();
+              },
             ),
             StreamBuilder(
               stream: ordenadoresStream,
@@ -72,6 +77,8 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                           return ListTile(
                             title: Text(ordenadoresSnapshot['Serial_number']),
                             subtitle: Text(ordenadoresSnapshot['Periferico']),
+                            trailing: const Icon(Icons.arrow_right_outlined),
+                            onTap: () => context.push('/detallesOrdenador_screen'),
                           );
                         },
                       ))
@@ -94,17 +101,8 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
 
   getOnTheLoad() async {
     ordenadoresStream = await DataBaseMethods().getOrdenadoresDetails();
+
     setState(() {});
   }
 
-  getOrdenadoresDisponibles() async {
-    var numero = await FirebaseFirestore.instance
-        .collection('dgaep')
-        .doc('inventario')
-        .collection("Ordenadores")
-        .where('Disponible', isEqualTo: true)
-        .get();
-    contadorOrdenadoresDisponibles = numero.size;
-    setState(() {});
-  }
 }

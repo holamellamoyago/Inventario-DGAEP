@@ -5,16 +5,8 @@ class DataBaseMethods {
     return await FirebaseFirestore.instance
         .collection('dgaep')
         .doc('inventario')
-        .collection('Ordenadores')
+        .collection('Ordenador')
         .snapshots();
   }
 
-
-  // Future<Map<String, dynamic>> getOrdenadoresDisponibles() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('dgaep')
-  //       .doc('inventario')
-  //       .collection('ordenadores')
-  //       .where((event) => "ocupado" == false);
-  // }
 }

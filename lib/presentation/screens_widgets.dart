@@ -56,6 +56,9 @@ export 'package:firebase_web/presentation/screens/inventario/inventory_screen.da
 export 'package:firebase_web/presentation/widgets/widgets.dart';
 export 'package:firebase_web/presentation/screens/inventario/ordenadores/crear_ordenadores_screen.dart';
 
+export 'package:firebase_web/presentation/screens/inventario/articulo_screen.dart';
+export 'package:firebase_web/presentation/screens/inventario/ordenadores/detalles_ordenador_screen.dart';
+
 
 
 

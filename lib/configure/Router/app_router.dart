@@ -1,8 +1,8 @@
-import 'package:firebase_web/presentation/screens/inventario/articulo_screen.dart';
+
 import 'package:firebase_web/presentation/screens_widgets.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/articulo_screen', 
+  initialLocation: '/ordenadores_screen', 
   routes: [
   GoRoute(
     path: '/login_screen',
@@ -23,6 +23,11 @@ final appRouter = GoRouter(
     path: '/ordenadores_screen',
     name: OrdenadoresScreen.name,
     builder: (context, state) => const OrdenadoresScreen(),
+  ),
+  GoRoute(
+    path: '/detallesOrdenador_screen',
+    name: DetallesOrdenador.name,
+    builder: (context, state) => const DetallesOrdenador(),
   ),
   GoRoute(
     path: '/monitores_screen',
