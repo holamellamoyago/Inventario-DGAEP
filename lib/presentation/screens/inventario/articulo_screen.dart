@@ -16,8 +16,9 @@ class ArticuloScreen extends StatefulWidget {
 List<String> perifericos = <String>[
   'Ordenador',
   'Portatil',
-  'Monitores',
-  'Ratones',
+  'Monitor',
+  'Raton',
+  'Teclado',
   'Hub Dell'
 ];
 
@@ -39,6 +40,22 @@ List<String> ordenadoresRAM = <String>[
   '64 GB',
 ];
 
+List<String> monitoresResolucion = <String>[
+  '1440 x 900',
+  '1920 x 1080',
+  '2560 x 1440',
+  '3840 x 2160'
+];
+
+List<String> monitoresPulgadas = <String>[
+  '19"',
+  '21"',
+  '24"',
+  '27"',
+  '32"',
+  '36"',
+];
+
 class _ArticuloScreenState extends State<ArticuloScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var prefs = PreferenciasInventario();
@@ -49,6 +66,8 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   String opcionSeleccionadaPerifericos = perifericos.first;
   String opcionSeleccionadaProcesador = ordenadoresProcesador.first;
   String opcionSeleccionadaRAM = ordenadoresRAM.first;
+  String opcionSeleccionadaResolucion = monitoresResolucion.first;
+  String opcionSeleccionadaPulgadas = monitoresPulgadas.first;
 
   TextEditingController personaController = TextEditingController();
 
@@ -71,65 +90,85 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Datos do formulario',
-              style: titleStyleLarge,
-            ),
-            const PaddingCustom(
-              height: 10,
-            ),
-            textFieldNombrePersona(context),
-            const PaddingCustom(
-              height: 20,
-            ),
-            textFieldSerialNumber(context, serialNumberController),
-            const PaddingCustom(
-              height: 10,
-            ),
-            // dropDownMenuOrdenadores(context),
-            dropDownMenuCustom(),
-            prefs.ultimoPerifericoSeleccionado == 'Ordenador'
-                ? especificacionesCutom()
-                : const SizedBox(),
-            const PaddingCustom(
-              height: 10,
-            ),
-            const PaddingCustom(
-              height: 10,
-            ),
-            containerImagen(context),
-            OutlinedButton(
-                onPressed: () async {
-                  crearNuevoArticulo();
-                  context.go('/');
-                  prefs.ultimoPerifericoSeleccionado = 'Seleccione un periferico';
-                },
-                child: const Text('Enviar ao inventario')),
-            OutlinedButton(
-                onPressed: () {
-                  showSnackBar(context, prefs.ultimaFotoSacada);
-                  prefs.ultimaFotoSacada =
-                      'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
-                },
-                child: const Text('Mostrar el p')),
-            OutlinedButton(
-                onPressed: () async {
-                  prefs.ultimoPerifericoSeleccionado = 'Hub';
-                  showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
-                },
-                child: const Text('Reiniciar a portatil')),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Datos do formulario',
+                style: titleStyleLarge,
+              ),
+              const PaddingCustom(
+                height: 10,
+              ),
+              textFieldNombrePersona(context),
+              const PaddingCustom(
+                height: 20,
+              ),
+              textFieldSerialNumber(context, serialNumberController),
+              const PaddingCustom(
+                height: 10,
+              ),
+              // dropDownMenuOrdenadores(context),
+              dropDownMenuCustom(),
+              prefs.ultimoPerifericoSeleccionado == 'Ordenador' ||
+                      prefs.ultimoPerifericoSeleccionado == 'Portatil'
+                  ? especificacionesOrdenador()
+                  : prefs.ultimoPerifericoSeleccionado == 'Monitor'
+                      ? especificacionesMonitor()
+                      : SizedBox(),
+              const PaddingCustom(
+                height: 10,
+              ),
+              const PaddingCustom(
+                height: 10,
+              ),
+              containerImagen(context),
+              OutlinedButton(
+                  onPressed: () async {
+                    crearNuevoArticulo();
+                    context.go('/');
+                    prefs.ultimoPerifericoSeleccionado =
+                        'Seleccione un periferico';
+                  },
+                  child: const Text('Enviar ao inventario')),
+              OutlinedButton(
+                  onPressed: () {
+                    showSnackBar(context, prefs.ultimaFotoSacada);
+                    prefs.ultimaFotoSacada =
+                        'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
+                  },
+                  child: const Text('Mostrar el p')),
+              OutlinedButton(
+                  onPressed: () async {
+                    prefs.ultimoPerifericoSeleccionado = 'Hub';
+                    showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
+                  },
+                  child: const Text('Reiniciar a portatil')),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget especificacionesCutom() {
+  Widget especificacionesMonitor() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        DropDownMenu3(
+            opcionSeleccionada: opcionSeleccionadaResolucion,
+            lista: monitoresResolucion),
+        DropDownMenu3(
+            opcionSeleccionada: opcionSeleccionadaPulgadas,
+            lista: monitoresPulgadas)
+      ],
+    );
+  }
+
+  Widget especificacionesOrdenador() {
     return Row(
       children: [
         Expanded(
@@ -394,5 +433,60 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   }
 }
 
+// class DropDownButtonCustom2 extends StatefulWidget {
+
+//   DropDownButtonCustom2({
+//     super.key,
+//     required this.opcionSeleccionada,
+//     required this.lista
+//   });
+
+//   @override
+//   State<DropDownButtonCustom2> createState() => _DropDownButtonCustom2State(lista: lista, opcionSeleccionada: opcionSeleccionada);
+// }
+
+// class _DropDownButtonCustom2State extends State<DropDownButtonCustom2> {
+//   String opcionSeleccionadaResolucion = monitoresResolucion.first;
+//     final String lista;
+//   final String opcionSeleccionada;
+
+//   _DropDownButtonCustom2State({required this.lista, required this.opcionSeleccionada});
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+
+// }
+
+class DropDownMenu3 extends StatefulWidget {
+  DropDownMenu3(
+      {super.key, required this.opcionSeleccionada, required this.lista});
+  String opcionSeleccionada;
+  final List<String> lista;
+
+  @override
+  State<DropDownMenu3> createState() => _DropDownMenu3State();
+}
+
+class _DropDownMenu3State extends State<DropDownMenu3> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: widget.opcionSeleccionada,
+      items: widget.lista.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          child: Text(value),
+          value: value,
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          widget.opcionSeleccionada = value!;
+          showSnackBar(context, widget.opcionSeleccionada);
+        });
+      },
+    );
+  }
+}
 
 // Tengo que hacer que con el boton de abajo limpiar las prefs y así comprobar de verdad quien es el prf.
