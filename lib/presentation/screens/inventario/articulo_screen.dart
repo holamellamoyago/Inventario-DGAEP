@@ -155,12 +155,14 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   }
 
   Widget especificacionesMonitor() {
+    var size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         DropDownMenu3(
             opcionSeleccionada: opcionSeleccionadaResolucion,
             lista: monitoresResolucion),
+          PaddingCustom(width: size.width*0.1,),
         DropDownMenu3(
             opcionSeleccionada: opcionSeleccionadaPulgadas,
             lista: monitoresPulgadas)
@@ -471,20 +473,27 @@ class DropDownMenu3 extends StatefulWidget {
 class _DropDownMenu3State extends State<DropDownMenu3> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: widget.opcionSeleccionada,
-      items: widget.lista.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          child: Text(value),
-          value: value,
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          widget.opcionSeleccionada = value!;
-          showSnackBar(context, widget.opcionSeleccionada);
-        });
-      },
+    return Expanded(
+      child: DropdownButton<String>(
+        
+        underline: Container(height: 2,color: Colors.blueAccent,),
+        value: widget.opcionSeleccionada,
+        icon: const Icon(Icons.arrow_downward),
+        isExpanded: true,
+        items: widget.lista.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            child: Text(value),
+            value: value,
+            
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            widget.opcionSeleccionada = value!;
+            showSnackBar(context, widget.opcionSeleccionada);
+          });
+        },
+      ),
     );
   }
 }
