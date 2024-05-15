@@ -1,3 +1,4 @@
+import 'package:firebase_web/presentation/Models/inventarioModel.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class DetallesOrdenador extends StatefulWidget {
 class _DetallesOrdenadorState extends State<DetallesOrdenador> {
   @override
   void initState() {
+    controllers();
     super.initState();
   }
 
@@ -120,12 +122,20 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
   }
 
   void controllers() async {
-    final ref = FirebaseFirestore.instance;
-    final snapshot = await ref.child('/dgaep/inventario/Ordenador/9728401485004/').get();
-    if (snapshot.exists) {
-      print(snapshot.value);
-    } else {
-      print('No data available.');
+    final ref = FirebaseFirestore.instance
+        .collection('dgaep')
+        .doc('inventario')
+        .collection('Ordenador')
+        .doc('9728401485004')
+        .withConverter(
+          fromFirestore: Inventario.fromFirestore,
+          toFirestore: (Inventario inventario, _) => inventario.toFirestore(),
+        );
+    final docSnap = await ref.get();
+    final inventario = docSnap.data();
+    if (inventario != null) {
+      prefsO.dono = inventario.dono!;
+      showSnackBar(context, prefsO.dono);
     }
   }
 }
