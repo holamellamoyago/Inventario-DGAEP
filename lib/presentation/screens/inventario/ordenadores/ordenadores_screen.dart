@@ -119,12 +119,12 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          context.push('/creacion_ordenadores_screen');
-        },
-        child: const Icon(Icons.computer),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     context.push('/creacion_ordenadores_screen');
+      //   },
+      //   child: const Icon(Icons.computer),
+      // ),
     );
   }
 

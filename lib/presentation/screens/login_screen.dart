@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
+import 'package:image_network/image_network.dart';
 
 class DashBoardScreen extends StatefulWidget {
   static const name = '/login_screen';
@@ -24,6 +25,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
       body: Center(
         child: Padding(
@@ -31,25 +33,41 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Inicio de sesión'),
+              Image.network(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2V6IIe85O5QimsrqMOh2VuMsvpTVEMLa3RCAe6F5NnQ&s'),
+              PaddingCustom(
+                height: 10,
+              ),
+              Text(
+                'Login',
+                style: titleStyleLarge,
+              ),
+              const PaddingCustom(
+                height: 10,
+              ),
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(), label: Text('Username')),
+                    border: OutlineInputBorder(), label: Text('Email (helpdesk@dgaep.gov.pt)')),
               ),
               const SizedBox(
                 height: 14,
               ),
               TextField(
                 controller: passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(), label: Text('Contraseña')),
+                    border: OutlineInputBorder(), label: Text('Palabra-passe (abc123.)')),
+              ),
+              const PaddingCustom(
+                height: 10,
               ),
               FilledButton(
                   onPressed: () {
                     try {
                       signIn();
-                      context.go('/home_screen');
+                      context.go('/');
+                      prefs.ultimaScreen = '/';
                     } catch (e) {
                       print('Error: $e');
                     }

@@ -14,6 +14,13 @@ class PreferenciasInventario {
   set ultimoEscaneo(String value) {
     prefs.setString('ultimoEscaneo', value);
   }
+  String get ultimaScreen {
+    return prefs.getString('ultimaScreen') ?? '/login_screen';
+  }
+
+  set ultimaScreen(String value) {
+    prefs.setString('ultimaScreen', value);
+  }
 
   String get ultimoPerifericoSeleccionado {
     return prefs.getString('ultimoPerifericoSeleccionado') ?? 'Seleccione un periferico';

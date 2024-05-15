@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:firebase_web/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ArticuloScreen extends StatefulWidget {
   static const name = '/articulo_screen';
@@ -68,8 +69,10 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   String opcionSeleccionadaPulgadas = monitoresPulgadas.first;
 
   TextEditingController personaController = TextEditingController();
+  TextEditingController perifericoController = TextEditingController();
   TextEditingController serialNumberController = TextEditingController();
-  
+
+  bool disponibleController = false;
 
   @override
   void initState() {
@@ -123,7 +126,17 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                 height: 10,
               ),
               containerImagen(context),
-              PaddingCustom(height: size.height*0.05,),
+              PaddingCustom(
+                height: size.height * 0.05,
+              ),
+              Switch(
+                value: disponibleController,
+                onChanged: (value) {
+                  setState(() {
+                    disponibleController = !disponibleController;
+                  });
+                },
+              ),
               OutlinedButton(
                   onPressed: () async {
                     crearNuevoArticulo();
@@ -147,7 +160,9 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         DropDownButtonCustom(
             opcionSeleccionada: opcionSeleccionadaResolucion,
             lista: monitoresResolucion),
-          PaddingCustom(width: size.width*0.1,),
+        PaddingCustom(
+          width: size.width * 0.1,
+        ),
         DropDownButtonCustom(
             opcionSeleccionada: opcionSeleccionadaPulgadas,
             lista: monitoresPulgadas)
@@ -219,7 +234,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   }
 
   Widget dropDownMenuCustom() {
-    TextEditingController perifericoController = TextEditingController();
     return DropdownMenu(
       controller: perifericoController,
       expandedInsets: EdgeInsets.zero,
@@ -230,14 +244,14 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         return DropdownMenuEntry(
           value: value2,
           label: value2,
-          
         );
       }).toList(),
       onSelected: (value2) async {
         setState(() {
-          perifericoController.text = value2!;
-          prefs.ultimoPerifericoSeleccionado = value2;
-          showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
+          prefs.ultimoPerifericoSeleccionado = value2!;
+          showSnackBar(
+            context, perifericoController.text
+          );
         });
       },
     );
@@ -271,7 +285,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
 
     final persona =
         personaController.text.isEmpty ? 'Nadie' : personaController.text;
-    final periferico = opcionSeleccionadaPerifericos;
+    final periferico = perifericoController.text;
     final procesador = opcionSeleccionadaProcesador;
     final ram = opcionSeleccionadaRAM;
     final image = prefs.ultimaFotoSacada;
@@ -285,9 +299,9 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
           .doc(serialNumberController.text)
           .set({
         'Serial_number': serialNumberController.text,
-        'Periferico': opcionSeleccionadaPerifericos,
+        'Periferico': perifericoController.text,
         'Dono': persona,
-        'Disponible': false,
+        'Disponible': disponibleController,
         'Procesador': procesador,
         'Memoria_RAM': ram,
         'image_url': image
@@ -298,13 +312,13 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
       await db
           .collection('dgaep')
           .doc('inventario')
-          .collection(opcionSeleccionadaPerifericos)
+          .collection(perifericoController.text)
           .doc(prefs.ultimoEscaneo)
           .set({
         'Serial_number': serialNumberController.text,
         'Periferico': opcionSeleccionadaPerifericos,
         'Dono': persona,
-        'Disponible': true,
+        'Disponible': disponibleController,
         'image_url': image
       });
       prefs.ultimaFotoSacada =

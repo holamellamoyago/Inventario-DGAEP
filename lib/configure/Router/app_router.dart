@@ -2,7 +2,7 @@
 import 'package:firebase_web/presentation/screens_widgets.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/', 
+  initialLocation: prefs.ultimaScreen, 
   routes: [
   GoRoute(
     path: '/login_screen',
