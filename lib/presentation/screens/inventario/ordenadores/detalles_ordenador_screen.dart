@@ -17,13 +17,6 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
   TextEditingController memoriaRamController = TextEditingController();
   TextEditingController perifericoController = TextEditingController();
   TextEditingController serialNumberController = TextEditingController();
-  TextEditingController procesadorController = TextEditingController();
-
-  String opcionSeleccionadaPerifericos = perifericos.first;
-  String opcionSeleccionadaProcesador = ordenadoresProcesador.first;
-  String opcionSeleccionadaRAM = ordenadoresRAM.first;
-  String opcionSeleccionadaResolucion = monitoresResolucion.first;
-  String opcionSeleccionadaPulgadas = monitoresPulgadas.first;
 
   @override
   void initState() {
@@ -61,23 +54,24 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Dono do ordenador:',
-                          style: titleStyleLarge,
-                        ),
-                        const PaddingCustom(
-                          height: 10,
-                        ),
-                        TextField(
-                          controller: donoController,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
-                        ),
-                        Text(
                           'Serial number',
                           style: titleStyleLarge,
                         ),
                         TextField(
                           controller: serialNumberController,
+                          enabled: false,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder()),
+                        ),
+                        const PaddingCustom(
+                          height: 10,
+                        ),
+                        Text(
+                          'Dono do ordenador:',
+                          style: titleStyleLarge,
+                        ),
+                        TextField(
+                          controller: donoController,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder()),
                         ),
@@ -100,12 +94,16 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
                             setState(() {
                               perifericoController.text = value2!;
                               prefsO.periferico = value2;
-                              showSnackBar(
-                                  context, prefsO.periferico);
+                              showSnackBar(context, prefsO.periferico);
                             });
                           },
                         ),
-                        prefsO.periferico == 'Portatil' || prefsO.periferico == 'Ordenador' ? especificacionesOrdenador() : prefsO.periferico == 'Monitor' ? especificacionesMonitor() : const SizedBox(),
+                        prefsO.periferico == 'Portatil' ||
+                                prefsO.periferico == 'Ordenador'
+                            ? especificacionesOrdenador()
+                            : prefsO.periferico == 'Monitor'
+                                ? const SizedBox()
+                                : const SizedBox(),
                         Text(
                           '¿Esta o ordenador disponible?',
                           style: titleStyleLarge,
@@ -129,6 +127,8 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
                                 onPressed: () async {
                                   await future.update({
                                     'Dono': donoController.text,
+                                    'Memoria_RAM': prefsO.memoriaRAM,
+                                    'Procesador': prefsO.procesador,
                                   });
                                 },
                                 child: const Text('Actualizar ordenador')),
@@ -148,8 +148,8 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
     final ref = FirebaseFirestore.instance
         .collection('dgaep')
         .doc('inventario')
-        .collection('Ordenador')
-        .doc('9728401485004')
+        .collection(prefs.ultimoPerifericoSeleccionado)
+        .doc(prefs.ultimoEscaneo)
         .withConverter(
           fromFirestore: Inventario.fromFirestore,
           toFirestore: (Inventario inventario, _) => inventario.toFirestore(),
@@ -168,37 +168,36 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
       donoController.text = prefsO.dono;
       memoriaRamController.text = prefsO.memoriaRAM;
       perifericoController.text = prefsO.periferico;
-      procesadorController.text = prefsO.procesador;
       serialNumberController.text = prefsO.serialNumber;
 
       showSnackBar(context, prefsO.dono);
     }
   }
 
-  Widget especificacionesMonitor() {
-    var size = MediaQuery.of(context).size;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        DropDownButtonCustom(
-            opcionSeleccionada: opcionSeleccionadaResolucion,
-            lista: monitoresResolucion),
-        PaddingCustom(
-          width: size.width * 0.1,
-        ),
-        DropDownButtonCustom(
-            opcionSeleccionada: opcionSeleccionadaPulgadas,
-            lista: monitoresPulgadas)
-      ],
-    );
-  }
+  // Widget especificacionesMonitor() {
+  //   var size = MediaQuery.of(context).size;
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //     children: [
+  //       DropDownButtonCustom(
+  //           opcionSeleccionada: opcionSeleccionadaResolucion,
+  //           lista: monitoresResolucion),
+  //       PaddingCustom(
+  //         width: size.width * 0.1,
+  //       ),
+  //       DropDownButtonCustom(
+  //           opcionSeleccionada: opcionSeleccionadaPulgadas,
+  //           lista: monitoresPulgadas)
+  //     ],
+  //   );
+  // }
 
-    Widget especificacionesOrdenador() {
+  Widget especificacionesOrdenador() {
     return Row(
       children: [
         Expanded(
           child: DropdownButton<String>(
-            value: opcionSeleccionadaProcesador,
+            value: prefsO.procesador,
             isExpanded: true,
             icon: const Icon(Icons.arrow_downward),
             // elevation: 16,
@@ -210,9 +209,9 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
             onChanged: (String? value) {
               // This is called when the user selects an item.
               setState(() {
-                opcionSeleccionadaProcesador = value!;
+                prefsO.procesador = value!;
               });
-              showSnackBar(context, opcionSeleccionadaProcesador);
+              showSnackBar(context, prefsO.procesador);
             },
             items: ordenadoresProcesador
                 .map<DropdownMenuItem<String>>((String value) {
@@ -228,7 +227,7 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
         ),
         Expanded(
           child: DropdownButton<String>(
-            value: opcionSeleccionadaRAM,
+            value: prefsO.memoriaRAM,
             isExpanded: true,
             icon: const Icon(Icons.arrow_downward),
             // elevation: 16,
@@ -240,9 +239,9 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
             onChanged: (String? value) {
               // This is called when the user selects an item.
               setState(() {
-                opcionSeleccionadaRAM = value!;
+                prefsO.memoriaRAM = value!;
               });
-              showSnackBar(context, opcionSeleccionadaRAM);
+              showSnackBar(context, prefsO.memoriaRAM);
             },
             items: ordenadoresRAM.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(

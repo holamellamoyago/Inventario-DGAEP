@@ -1,4 +1,5 @@
 import 'package:firebase_web/presentation/screens_widgets.dart';
+import 'package:flutter/material.dart';
 
 class Inventario {
   final String? dono;
@@ -35,6 +36,10 @@ class Inventario {
   }
   // TODO Queda hacer el toFirestore
   Map<String, dynamic> toFirestore() {
-    return {if (dono != null) "Dono": dono};
+    return {if (dono != null) "Dono": dono, 
+    if(memoriaRAM != null) "Memoria_RAM":memoriaRAM,
+    if(periferico != null) "Periferico":periferico
+    };
+
   }
 }

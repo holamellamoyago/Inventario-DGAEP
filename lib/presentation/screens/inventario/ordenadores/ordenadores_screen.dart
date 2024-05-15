@@ -92,7 +92,6 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                                 ordenadoresSnapshot['Serial_number'];
                             String periferico =
                                 ordenadoresSnapshot['Periferico'];
-                            dono = prefsO.dono;
                             return ListTile(
                               title: Text(dono),
                               subtitle: Text(serialNumber),
