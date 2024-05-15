@@ -54,4 +54,11 @@ class PreferenciasOrdenadores {
   set imageURL(String value) {
     prefsO.setString('imageURL', value);
   }
+  bool get disponible {
+    return prefsO.getBool('disponible') ?? false;
+  }
+
+  set disponible(bool value) {
+    prefsO.setBool('disponible', value);
+  }
 }
