@@ -132,4 +132,43 @@ class TextFieldcustom extends StatelessWidget {
       controller: controller,
     );
   }
+} 
+
+
+class DropDownButtonCustom extends StatefulWidget {
+  DropDownButtonCustom(
+      {super.key, required this.opcionSeleccionada, required this.lista});
+  String opcionSeleccionada;
+  final List<String> lista;
+
+  @override
+  State<DropDownButtonCustom> createState() => _DropDownButtonState();
+}
+
+class _DropDownButtonState extends State<DropDownButtonCustom> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: DropdownButton<String>(
+        
+        underline: Container(height: 2,color: Colors.blueAccent,),
+        value: widget.opcionSeleccionada,
+        icon: const Icon(Icons.arrow_downward),
+        isExpanded: true,
+        items: widget.lista.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+            
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            widget.opcionSeleccionada = value!;
+            showSnackBar(context, widget.opcionSeleccionada);
+          });
+        },
+      ),
+    );
+  }
 }

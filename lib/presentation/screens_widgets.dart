@@ -1,4 +1,7 @@
 
+export 'package:firebase_web/configure/Storage/image_picker.dart';
+export 'package:firebase_web/configure/Storage/storage.dart';
+export 'package:firebase_web/configure/preferences/prefs_ordenadores.dart';
 
 
 // Widgets

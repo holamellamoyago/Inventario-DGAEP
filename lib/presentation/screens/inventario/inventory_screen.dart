@@ -19,31 +19,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
     // String text = '';
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(title: const Text('Inventario', style: TextStyle(fontWeight: FontWeight.bold),), centerTitle: true, ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GestureDetector(
-                onTap: () => context.push('/home_screen'),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.arrow_back),
-                    Text(
-                      'Inventario',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    )
-                  ],
-                ),
-              ),
-            ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
             Text(
               'Añade o elimina los articulos que necesites',
@@ -89,7 +70,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 },
               ),
             ),
-            Text(text),
             Positioned(
                 child: Expanded(
               child: Stack(
@@ -127,7 +107,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
       prefs.ultimoEscaneo = barcodeScanRes;
     } catch (e) {
       showSnackBar(context, 'Ocurrio un mensaje en la lectura del código QR');
-      barcodeScanRes = 'ff';
+      prefs.ultimoEscaneo = 'No tenho código';
+      context.go('/articulo_screen');
       return;
     }
 

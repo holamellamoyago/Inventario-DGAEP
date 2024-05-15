@@ -1,8 +1,6 @@
 import 'dart:io';
-
-import 'package:firebase_web/configure/Storage/image_picker.dart';
-import 'package:firebase_web/configure/Storage/storage.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
+import 'package:firebase_web/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ArticuloScreen extends StatefulWidget {
@@ -111,14 +109,13 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
               const PaddingCustom(
                 height: 10,
               ),
-              // dropDownMenuOrdenadores(context),
               dropDownMenuCustom(),
               prefs.ultimoPerifericoSeleccionado == 'Ordenador' ||
                       prefs.ultimoPerifericoSeleccionado == 'Portatil'
                   ? especificacionesOrdenador()
                   : prefs.ultimoPerifericoSeleccionado == 'Monitor'
                       ? especificacionesMonitor()
-                      : SizedBox(),
+                      : const SizedBox(),
               const PaddingCustom(
                 height: 10,
               ),
@@ -126,6 +123,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                 height: 10,
               ),
               containerImagen(context),
+              PaddingCustom(height: size.height*0.05,),
               OutlinedButton(
                   onPressed: () async {
                     crearNuevoArticulo();
@@ -134,19 +132,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
                         'Seleccione un periferico';
                   },
                   child: const Text('Enviar ao inventario')),
-              OutlinedButton(
-                  onPressed: () {
-                    showSnackBar(context, prefs.ultimaFotoSacada);
-                    prefs.ultimaFotoSacada =
-                        'https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png';
-                  },
-                  child: const Text('Mostrar el p')),
-              OutlinedButton(
-                  onPressed: () async {
-                    prefs.ultimoPerifericoSeleccionado = 'Hub';
-                    showSnackBar(context, prefs.ultimoPerifericoSeleccionado);
-                  },
-                  child: const Text('Reiniciar a portatil')),
             ],
           ),
         ),
@@ -159,11 +144,11 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        DropDownMenu3(
+        DropDownButtonCustom(
             opcionSeleccionada: opcionSeleccionadaResolucion,
             lista: monitoresResolucion),
           PaddingCustom(width: size.width*0.1,),
-        DropDownMenu3(
+        DropDownButtonCustom(
             opcionSeleccionada: opcionSeleccionadaPulgadas,
             lista: monitoresPulgadas)
       ],
@@ -245,6 +230,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
         return DropdownMenuEntry(
           value: value2,
           label: value2,
+          
         );
       }).toList(),
       onSelected: (value2) async {
@@ -435,67 +421,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   }
 }
 
-// class DropDownButtonCustom2 extends StatefulWidget {
 
-//   DropDownButtonCustom2({
-//     super.key,
-//     required this.opcionSeleccionada,
-//     required this.lista
-//   });
 
-//   @override
-//   State<DropDownButtonCustom2> createState() => _DropDownButtonCustom2State(lista: lista, opcionSeleccionada: opcionSeleccionada);
-// }
-
-// class _DropDownButtonCustom2State extends State<DropDownButtonCustom2> {
-//   String opcionSeleccionadaResolucion = monitoresResolucion.first;
-//     final String lista;
-//   final String opcionSeleccionada;
-
-//   _DropDownButtonCustom2State({required this.lista, required this.opcionSeleccionada});
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-
-// }
-
-class DropDownMenu3 extends StatefulWidget {
-  DropDownMenu3(
-      {super.key, required this.opcionSeleccionada, required this.lista});
-  String opcionSeleccionada;
-  final List<String> lista;
-
-  @override
-  State<DropDownMenu3> createState() => _DropDownMenu3State();
-}
-
-class _DropDownMenu3State extends State<DropDownMenu3> {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: DropdownButton<String>(
-        
-        underline: Container(height: 2,color: Colors.blueAccent,),
-        value: widget.opcionSeleccionada,
-        icon: const Icon(Icons.arrow_downward),
-        isExpanded: true,
-        items: widget.lista.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            child: Text(value),
-            value: value,
-            
-          );
-        }).toList(),
-        onChanged: (value) {
-          setState(() {
-            widget.opcionSeleccionada = value!;
-            showSnackBar(context, widget.opcionSeleccionada);
-          });
-        },
-      ),
-    );
-  }
-}
 
 // Tengo que hacer que con el boton de abajo limpiar las prefs y así comprobar de verdad quien es el prf.

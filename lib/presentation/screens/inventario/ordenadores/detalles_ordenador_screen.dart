@@ -1,4 +1,3 @@
-import 'package:firebase_web/configure/preferences/prefs_inventario.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -11,63 +10,122 @@ class DetallesOrdenador extends StatefulWidget {
 }
 
 class _DetallesOrdenadorState extends State<DetallesOrdenador> {
-  var prefs = PreferenciasInventario();
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  TextEditingController donoController = TextEditingController();
+  TextEditingController memoriaRamController = TextEditingController();
+  TextEditingController perifericoController = TextEditingController();
+  TextEditingController serialNumberController = TextEditingController();
+  TextEditingController procesadorController = TextEditingController();
+
+  var prefsO = PreferenciasOrdenadores();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController donoController = TextEditingController();
-    TextEditingController memoriaRamController = TextEditingController();
-    TextEditingController perifericoController = TextEditingController();
-    TextEditingController serialNumberController = TextEditingController();
-    TextEditingController procesadorController = TextEditingController();
-
-    final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
-
     var future = FirebaseFirestore.instance
         .collection('dgaep')
         .doc('inventario')
         .collection(prefs.ultimoPerifericoSeleccionado)
         .doc(prefs.ultimoEscaneo);
+
+    var size = MediaQuery.of(context).size;
+
+    final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalles de ordenadores'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: FutureBuilder(
-          future: future.get(),
-          builder: (context, snapshot) {
-            final _data = snapshot.data;
-            final dono = _data?['Dono'];
-            final memoria_RAM = _data?['Memoria_RAM'];
-            final disponible = _data?['Disponible'];
-            final periferico = _data?['Periferico'];
-            final procesador = _data?['Procesador'];
-            final serial_number = _data?['Serial_number'];
-            return snapshot.hasData
-                ? Column(
-                    children: [
-                      Text('Dono do ordenador:', style: titleStyleLarge,),
-                      TextFieldcustom(texto: dono, controller: donoController),
-                      Text('¿Esta o ordenador disponible?', style: titleStyleLarge,),
-                      Switch(
-                        value: disponible,
-                        onChanged: (value) {
-                          var disponible = value;
-                          disponible != value;
-                          future.update({
-                            'Disponible': disponible
-                          }
-                          );
-                          setState(() {});
-                        },
-                      ),
-                    ],
-                  )
-                : const CircularProgressIndicator();
-          },
+        appBar: AppBar(
+          title: const Text('Detalles de ordenadores'),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+            child: FutureBuilder(
+              future: future.get(),
+              builder: (context, snapshot) {
+                final _data = snapshot.data;
+                final dono = _data?['Dono'];
+                final memoria_RAM = _data?['Memoria_RAM'];
+                final disponible = _data?['Disponible'];
+                final periferico = _data?['Periferico'];
+                final procesador = _data?['Procesador'];
+                final serial_number = _data?['Serial_number'];
+
+                donoController.text = prefsO.dono;
+
+                return snapshot.hasData
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Dono do ordenador:',
+                            style: titleStyleLarge,
+                          ),
+                          const PaddingCustom(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: donoController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                          ),
+                          Text('Serial number'),
+                          TextField(
+                            controller: serialNumberController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                          ),
+                          const PaddingCustom(
+                            height: 10,
+                          ),
+                          Text(
+                            '¿Esta o ordenador disponible?',
+                            style: titleStyleLarge,
+                          ),
+                          const PaddingCustom(
+                            width: 10,
+                          ),
+                          Switch(
+                            value: disponible,
+                            onChanged: (value) {
+                              var disponible = value;
+                              disponible != value;
+                              future.update({'Disponible': disponible});
+                              setState(() {});
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FilledButton(
+                                  onPressed: () async {
+                                    await future.update({
+                                      'Dono': donoController.text,
+                                    });
+                                  },
+                                  child: const Text('Actualizar ordenador')),
+                            ],
+                          )
+                        ],
+                      )
+                    : const CircularProgressIndicator();
+              },
+            ),
+          ),
+        ));
+  }
+
+  void controllers() async {
+    final ref = FirebaseFirestore.instance;
+    final snapshot = await ref.child('/dgaep/inventario/Ordenador/9728401485004/').get();
+    if (snapshot.exists) {
+      print(snapshot.value);
+    } else {
+      print('No data available.');
+    }
   }
 }
