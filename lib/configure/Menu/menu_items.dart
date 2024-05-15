@@ -17,17 +17,17 @@ const appMenuItems = <MenuItem>[
   MenuItem(
       title: 'Manejo de inventario',
       subtitle: 'Añade , quita o modifica el inventario.',
-      link: '/inventario_screen',
+      link: '/inventarioscreen',
       icon: Icons.computer),
   MenuItem(
       title: 'Gestión de incidencias',
       subtitle: 'Atiende todos los tickets de los usuarios.',
-      link: '/home_screen',
+      link: '/',
       icon: Icons.playlist_play_rounded),
   MenuItem(
       title: 'Gestión de usuarios',
       subtitle: 'Atiende todos los tickets de los usuarios.',
-      link: '/home_screen',
+      link: '/',
       icon: Icons.person),
 ];
 
