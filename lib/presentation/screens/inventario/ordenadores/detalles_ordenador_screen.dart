@@ -135,6 +135,11 @@ class _DetallesOrdenadorState extends State<DetallesOrdenador> {
     final inventario = docSnap.data();
     if (inventario != null) {
       prefsO.dono = inventario.dono!;
+      prefsO.memoriaRAM = inventario.memoriaRAM!;
+      prefsO.periferico = inventario.periferico!;
+      prefsO.procesador = inventario.procesador!;
+      prefsO.serialNumber = inventario.serialNumber!;
+      prefsO.imageURL = inventario.imageURL!;
       showSnackBar(context, prefsO.dono);
     }
   }
