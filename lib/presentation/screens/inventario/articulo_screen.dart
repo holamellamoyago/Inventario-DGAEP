@@ -68,6 +68,8 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   String opcionSeleccionadaPulgadas = monitoresPulgadas.first;
 
   TextEditingController personaController = TextEditingController();
+  TextEditingController serialNumberController = TextEditingController();
+  
 
   @override
   void initState() {
@@ -79,8 +81,6 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final titleStyleLarge = Theme.of(context).textTheme.titleLarge;
-    TextEditingController serialNumberController =
-        TextEditingController(text: prefs.ultimoEscaneo);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -105,7 +105,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
               const PaddingCustom(
                 height: 20,
               ),
-              textFieldSerialNumber(context, serialNumberController),
+              textFieldSerialNumber(context),
               const PaddingCustom(
                 height: 10,
               ),
@@ -243,7 +243,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
     );
   }
 
-  Widget textFieldSerialNumber(BuildContext context, serialNumberController) {
+  Widget textFieldSerialNumber(BuildContext context) {
     return TextField(
       controller: serialNumberController,
       readOnly: false,
@@ -282,9 +282,9 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
           .collection('dgaep')
           .doc('inventario')
           .collection(periferico)
-          .doc(prefs.ultimoEscaneo)
+          .doc(serialNumberController.text)
           .set({
-        'Serial_number': prefs.ultimoEscaneo,
+        'Serial_number': serialNumberController.text,
         'Periferico': opcionSeleccionadaPerifericos,
         'Dono': persona,
         'Disponible': false,
@@ -301,7 +301,7 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
           .collection(opcionSeleccionadaPerifericos)
           .doc(prefs.ultimoEscaneo)
           .set({
-        'Serial_number': prefs.ultimoEscaneo,
+        'Serial_number': serialNumberController.text,
         'Periferico': opcionSeleccionadaPerifericos,
         'Dono': persona,
         'Disponible': true,
