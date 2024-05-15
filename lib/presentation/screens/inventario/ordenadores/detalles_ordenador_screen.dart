@@ -1,4 +1,4 @@
-import 'package:firebase_web/presentation/Models/inventarioModel.dart';
+import 'package:firebase_web/presentation/Models/inventario_model.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
