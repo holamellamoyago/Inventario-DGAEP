@@ -249,15 +249,14 @@ class _ArticuloScreenState extends State<ArticuloScreen> {
       onSelected: (value2) async {
         setState(() {
           prefs.ultimoPerifericoSeleccionado = value2!;
-          showSnackBar(
-            context, perifericoController.text
-          );
+          showSnackBar(context, perifericoController.text);
         });
       },
     );
   }
 
   Widget textFieldSerialNumber(BuildContext context) {
+    serialNumberController.text = prefs.ultimoEscaneo;
     return TextField(
       controller: serialNumberController,
       readOnly: false,

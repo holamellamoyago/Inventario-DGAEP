@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1050588380052-8flukv65cqqc33bt35ber98j92b7eh89.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.holamellamoyago.dgaep.android",
+            "certificate_hash": "355c2c30b74ed56fa058a60eab663f805d48e1a7"
+          }
+        },
+        {
           "client_id": "1050588380052-gkckkn92mo57u2i3dstaqgevcpr5b1v2.apps.googleusercontent.com",
           "client_type": 3
         }
