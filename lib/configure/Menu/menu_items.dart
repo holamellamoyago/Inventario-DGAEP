@@ -17,7 +17,7 @@ const appMenuItems = <MenuItem>[
   MenuItem(
       title: 'Manejo de inventario',
       subtitle: 'Añade , quita o modifica el inventario.',
-      link: '/inventarioscreen',
+      link: '/inventario_screen',
       icon: Icons.computer),
   MenuItem(
       title: 'Gestión de incidencias',
