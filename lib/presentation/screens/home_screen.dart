@@ -2,7 +2,7 @@ import 'package:firebase_web/presentation/screens_widgets.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const name = 'home_screen';
+  static const name = '/';
   const HomeScreen({super.key});
 
   @override
@@ -10,13 +10,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    // final uiProvider = Provider.of<UiProvider>(context);
-    // final currentIndex = uiProvider.seleccionMenu;
-
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(

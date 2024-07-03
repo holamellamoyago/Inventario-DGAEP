@@ -14,6 +14,7 @@ class PreferenciasInventario {
   set ultimoEscaneo(String value) {
     prefs.setString('ultimoEscaneo', value);
   }
+
   String get ultimaScreen {
     return prefs.getString('ultimaScreen') ?? '/login_screen';
   }
@@ -23,12 +24,14 @@ class PreferenciasInventario {
   }
 
   String get ultimoPerifericoSeleccionado {
-    return prefs.getString('ultimoPerifericoSeleccionado') ?? 'Seleccione un periferico';
+    return prefs.getString('ultimoPerifericoSeleccionado') ??
+        'Seleccione un periferico';
   }
 
   set ultimoPerifericoSeleccionado(String value) {
     prefs.setString('ultimoPerifericoSeleccionado', value);
   }
+
   String get ultimaFotoSacada {
     return prefs.getString('ultimaFotoSacada') ?? 'a';
   }
@@ -36,6 +39,7 @@ class PreferenciasInventario {
   set ultimaFotoSacada(String value) {
     prefs.setString('ultimaFotoSacada', value);
   }
+
   String get prueba {
     return prefs.getString('prueba') ?? 'a';
   }
@@ -43,4 +47,6 @@ class PreferenciasInventario {
   set prueba(String value) {
     prefs.setString('prueba', value);
   }
+
+
 }

@@ -83,7 +83,7 @@ class _OrdenadoresScreenState extends State<OrdenadoresScreen> {
                   return snapshot.hasData
                       ? Expanded(
                           child: ListView.builder(
-                          itemCount: snapshot.data.docs.length,
+                          itemCount: snapshot.data.docs,
                           itemBuilder: (context, index) {
                             DocumentSnapshot ordenadoresSnapshot =
                                 snapshot.data.docs[index];

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_web/presentation/screens_widgets.dart';
-import 'package:image_network/image_network.dart';
 
 class DashBoardScreen extends StatefulWidget {
   static const name = '/login_screen';

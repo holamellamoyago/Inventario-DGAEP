@@ -59,7 +59,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               child: ListView.builder(
                 itemCount: appMenuInventory.length,
                 itemBuilder: (context, index) {
-                  final _menuIndex = appMenuInventory[index];
+                  final _menuIndex = appMenuInventory[index]; 
                   return ListTile(
                     onTap: () => context.push(_menuIndex.link),
                     title: Text(_menuIndex.title),

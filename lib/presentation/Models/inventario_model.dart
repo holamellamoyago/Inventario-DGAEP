@@ -1,6 +1,4 @@
 import 'package:firebase_web/presentation/screens_widgets.dart';
-import 'package:flutter/material.dart';
-
 class Inventario {
   final String? dono;
   final String? memoriaRAM;
