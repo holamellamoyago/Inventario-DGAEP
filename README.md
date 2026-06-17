@@ -9,25 +9,25 @@
 <div align="center">
 
 ### Pantalla de inicio / Login
-<img src="screenshots/1.png" width="400" alt="Login"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/1.png" width="400" alt="Login"/>
 
 ### Panel principal
-<img src="screenshots/2.png" width="400" alt="Panel principal"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/2.png" width="400" alt="Panel principal"/>
 
 ### Gestión de inventario
-<img src="screenshots/3.png" width="400" alt="Inventario"/>
-<img src="screenshots/4.png" width="400" alt="Inventario"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/3.png" width="400" alt="Inventario"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/4.png" width="400" alt="Inventario"/>
 
 ### Detalles y operaciones
-<img src="screenshots/5.png" width="400" alt="Detalles"/>
-<img src="screenshots/6.png" width="400" alt="Operaciones"/>
-<img src="screenshots/7.png" width="400" alt="Operaciones"/>
-<img src="screenshots/8.png" width="400" alt="Gestión"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/5.png" width="400" alt="Detalles"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/6.png" width="400" alt="Operaciones"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/7.png" width="400" alt="Operaciones"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/8.png" width="400" alt="Gestión"/>
 
 ### Funcionalidades adicionales
-<img src="screenshots/9.png" width="400" alt="Funcionalidad"/>
-<img src="screenshots/10.png" width="400" alt="Funcionalidad"/>
-<img src="screenshots/11.png" width="400" alt="Funcionalidad"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/9.png" width="400" alt="Funcionalidad"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/10.png" width="400" alt="Funcionalidad"/>
+<img src="https://raw.githubusercontent.com/holamellamoyago/Inventario-DGAEP/master/screenshots/11.png" width="400" alt="Funcionalidad"/>
 
 </div>
 
